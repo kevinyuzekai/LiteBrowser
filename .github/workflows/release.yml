@@ -1,0 +1,48 @@
+name: release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to upload to'
+        default: 'v0.1.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-latest
+            args: '--target universal-apple-darwin --bundles dmg'
+            glob: 'src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg'
+          - platform: windows-latest
+            args: '--bundles msi'
+            glob: 'src-tauri/target/release/bundle/msi/*.msi'
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+      - run: npm ci
+      - run: npx tauri build ${{ matrix.args }}
+      - name: Upload to existing release (never overwrite existing assets)
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || 'v0.1.0' }}
+        run: |
+          existing="$(gh release view "$TAG" --json assets -q '.assets[].name')"
+          for f in ${{ matrix.glob }}; do
+            n="$(basename "$f")"
+            if printf '%s\n' "$existing" | grep -qxF "$n"; then echo "skip existing $n"; else gh release upload "$TAG" "$f"; fi
+          done

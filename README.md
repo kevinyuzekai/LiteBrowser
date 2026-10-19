@@ -46,4 +46,4 @@ npx tauri build
 
 LiteBrowser is a tiny desktop browser built with Tauri v2 on the system WebView. No account, URL-or-search address bar, tabs, new windows, and a local-only history view (search, delete, clear). MIT licensed.
 
-> CI：`ci/release.yml` 是 GitHub Actions 打包脚本（Windows + macOS）。要启用，把它移到 `.github/workflows/release.yml` 再推送（需要带 `workflow` 权限的账号）。
+> CI：`.github/workflows/release.yml`（手动运行）在 macOS 上打 Universal DMG、在 Windows 上打 MSI，并上传到已有 Release（不会覆盖已有文件）。
