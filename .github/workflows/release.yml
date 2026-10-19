@@ -1,0 +1,52 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-latest
+            args: ''
+          - platform: macos-latest
+            args: '--target universal-apple-darwin'
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+      - run: npm ci
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v__VERSION__
+          releaseName: 'LiteBrowser 轻量浏览器 v__VERSION__'
+          releaseBody: |
+            LiteBrowser 轻量浏览器 v__VERSION__ — 超轻量、无需登录的网页浏览器（基于系统 WebView）。
+            - Windows：下载 `LiteBrowser_*_x64-setup.exe`（推荐）或 `.msi`
+            - macOS：下载 `LiteBrowser_*_universal.dmg`（Intel / Apple 芯片通用）。未签名，首次打开请右键 →「打开」。
+            A super lightweight browser (system WebView). No account needed; history stays on your device.
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}
+      - name: Upload raw Windows exe (for MSIX packaging)
+        if: matrix.platform == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiteBrowser-win-x64-exe
+          path: src-tauri/target/release/LiteBrowser.exe

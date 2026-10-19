@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LiteBrowser</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="tabs"><div id="tablist"></div><button id="newtab" class="ib" data-t="newTab">+</button></div>
+<div id="bar">
+  <button id="back" class="ib" data-t="back">&#8592;</button>
+  <button id="fwd" class="ib" data-t="forward">&#8594;</button>
+  <button id="reload" class="ib" data-t="reload">&#8635;</button>
+  <button id="home" class="ib" data-t="home">&#8962;</button>
+  <form id="addrform"><input id="addr" spellcheck="false" autocomplete="off"></form>
+  <button id="histbtn" class="ib" data-t="history">&#9776;</button>
+  <button id="setbtn" class="ib" data-t="settings">&#9881;</button>
+</div>
+<div id="panel" hidden>
+  <div id="hist" hidden>
+    <div class="ph"><h2 data-l="history"></h2>
+      <input id="hq" data-p="searchHistory">
+      <button id="hclear" class="danger" data-l="clearAll"></button>
+      <button class="close" data-l="close"></button></div>
+    <ul id="hlist"></ul>
+    <p id="hempty" class="muted" data-l="empty" hidden></p>
+  </div>
+  <div id="sett" hidden>
+    <div class="ph"><h2 data-l="settings"></h2><button class="close" data-l="close"></button></div>
+    <label><span data-l="engine"></span>
+      <select id="engine">
+        <option value="bing">Bing</option><option value="google">Google</option>
+        <option value="baidu">百度 Baidu</option><option value="ddg">DuckDuckGo</option>
+      </select></label>
+    <label><span data-l="homeUrl"></span><input id="homeurl" placeholder="https://www.bing.com"></label>
+    <label><span data-l="lang"></span>
+      <select id="lang"><option value="zh">中文</option><option value="en">English</option></select></label>
+    <div class="keys" data-l="keys"></div>
+    <p class="muted" data-l="about"></p>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

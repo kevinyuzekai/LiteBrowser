@@ -1,0 +1,48 @@
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font:13px/1.4 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f3f4f6;color:#1f2937;overflow:hidden}
+#tabs{height:34px;display:flex;align-items:flex-end;padding:0 6px;background:#e5e7eb;gap:2px}
+#tablist{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;min-width:0;flex:0 1 auto}
+#tablist::-webkit-scrollbar{display:none}
+.tab{display:flex;align-items:center;gap:6px;height:28px;min-width:90px;max-width:220px;flex:0 1 200px;padding:0 6px 0 10px;border-radius:8px 8px 0 0;background:#d1d5db;cursor:default;user-select:none}
+.tab.on{background:#fff}
+.tab .tt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab .tx{border:0;background:none;border-radius:4px;width:18px;height:18px;line-height:16px;padding:0;color:#6b7280;cursor:pointer}
+.tab .tx:hover{background:#e5e7eb}
+.tab.ld .tt::before{content:"\25CC  ";color:#2563eb}
+#bar{height:44px;display:flex;align-items:center;gap:4px;padding:0 8px;background:#fff;border-bottom:1px solid #e5e7eb}
+.ib{border:0;background:none;width:30px;height:30px;border-radius:6px;font-size:16px;color:#374151;cursor:pointer}
+.ib:hover{background:#f3f4f6}
+#tabs .ib{height:26px;margin-bottom:2px}
+#addrform{flex:1;display:flex}
+#addr{flex:1;height:30px;border:1px solid #d1d5db;border-radius:15px;padding:0 14px;font:inherit;background:#f9fafb;outline:none}
+#addr:focus{border-color:#2563eb;background:#fff}
+#panel{position:absolute;top:78px;left:0;right:0;bottom:0;background:#fff;overflow:auto;padding:16px 24px}
+.ph{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ph h2{margin:0;font-size:18px;flex:0 0 auto}
+.ph input{flex:1;max-width:420px;height:30px;border:1px solid #d1d5db;border-radius:6px;padding:0 10px;font:inherit}
+.ph button,#sett button{height:30px;border:1px solid #d1d5db;background:#fff;border-radius:6px;padding:0 12px;cursor:pointer;font:inherit}
+.ph .close{margin-left:auto}
+.danger{color:#b91c1c}
+#hlist{list-style:none;margin:0;padding:0}
+#hlist li{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:6px}
+#hlist li:hover{background:#f3f4f6}
+#hlist .tm{color:#6b7280;width:120px;flex:0 0 auto;font-variant-numeric:tabular-nums}
+#hlist a{flex:1;min-width:0;color:#1f2937;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+#hlist a small{color:#6b7280;margin-left:8px}
+#hlist .del{border:0;background:none;color:#9ca3af;cursor:pointer;font-size:14px}
+#hlist .del:hover{color:#b91c1c}
+#hlist .day{font-weight:600;color:#374151;padding-top:12px}
+#hlist .day:hover{background:none}
+#sett label{display:flex;align-items:center;gap:12px;margin:10px 0}
+#sett label span{width:120px}
+#sett select,#sett input{height:30px;border:1px solid #d1d5db;border-radius:6px;padding:0 8px;font:inherit;min-width:260px}
+.keys{white-space:pre-line;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:10px 14px;margin:16px 0;max-width:560px}
+.muted{color:#6b7280}
+@media (prefers-color-scheme:dark){
+  html,body{background:#1f2937;color:#e5e7eb}
+  #tabs{background:#111827}.tab{background:#374151}.tab.on{background:#1f2937}
+  #bar,#panel{background:#1f2937;border-color:#374151}
+  .ib{color:#e5e7eb}.ib:hover,.tab .tx:hover,#hlist li:hover{background:#374151}
+  #addr,.ph input,#sett select,#sett input,.ph button,#sett button{background:#111827;color:#e5e7eb;border-color:#4b5563}
+  #hlist a{color:#e5e7eb}.keys{background:#111827;border-color:#374151}
+}

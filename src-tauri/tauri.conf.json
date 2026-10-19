@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "LiteBrowser",
+  "mainBinaryName": "LiteBrowser",
+  "version": "0.1.0",
+  "identifier": "com.kevinyuzekai.litebrowser",
+  "build": {
+    "frontendDist": "../ui"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "msi", "dmg", "app"],
+    "publisher": "kevinyuzekai",
+    "category": "Utility",
+    "shortDescription": "LiteBrowser 轻量浏览器",
+    "longDescription": "A super lightweight web browser built on the system WebView. No account needed, local browsing history.",
+    "copyright": "© 2026 kevinyuzekai",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": { "type": "downloadBootstrapper" },
+      "nsis": {
+        "languages": ["SimpChinese", "English"],
+        "displayLanguageSelector": false,
+        "installMode": "currentUser"
+      },
+      "wix": { "language": ["zh-CN", "en-US"] }
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    }
+  }
+}
