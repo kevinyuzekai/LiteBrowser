@@ -37,7 +37,7 @@
 
 - 不支持扩展 / 插件
 - 没有同步、密码管理器和书签（v0.1.0）
-- 没有下载管理界面（Windows 的下载由 WebView2 自己处理；macOS 版暂时不支持下载）
+- 没有下载管理界面
 - 网页显示效果取决于系统 WebView：Windows 需要 WebView2 运行时（Win10/11 一般自带），macOS 取决于系统 Safari 的版本
 - 安装包没有签名，第一次打开时系统可能会提示
 
@@ -62,7 +62,7 @@
 
 - No extensions
 - No sync, password manager or bookmarks (v0.1.0)
-- No download manager (on Windows, WebView2 handles downloads; downloads are not supported on macOS yet)
+- No download manager
 - Rendering depends on the system WebView: Windows needs the WebView2 runtime (usually preinstalled on Windows 10/11), and macOS depends on the system Safari version
 - Installers are unsigned, so the OS may warn the first time you open the app
 
