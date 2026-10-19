@@ -1,6 +1,6 @@
-# LiteBrowser 轻量浏览器
+# Plume 羽览
 
-超轻量的桌面网页浏览器：基于系统自带的 WebView（Windows 用 WebView2，macOS 用 WKWebView），安装包只有几 MB。
+羽览（Plume）是一个超轻量的桌面网页浏览器：基于系统自带的 WebView（Windows 用 WebView2，macOS 用 WKWebView），安装包只有几 MB。
 
 - **无需登录**，打开就能用；地址栏可输入网址或直接搜索（默认 Bing，可在设置里换成 Google / 百度 / DuckDuckGo）
 - 后退 / 前进 / 刷新 / 主页、多标签页、新窗口
@@ -9,16 +9,16 @@
 
 ## 下载
 
-到 [Releases](https://github.com/kevinyuzekai/LiteBrowser/releases) 下载：
+到 [Releases](../../releases) 下载：
 
-- Windows：`LiteBrowser_0.1.0_x64-setup.exe`（约 1.3 MB，推荐）或 `LiteBrowser_0.1.0_x64_zh-CN.msi` / `_en-US.msi`（约 1.7 MB）
-- macOS：`LiteBrowser_0.1.0_universal.dmg`（Intel / Apple 芯片通用，约 3.4 MB）
+- Windows：`Plume_0.1.0_x64-setup.exe`（约 1.3 MB，推荐）或 `Plume_0.1.0_x64_zh-CN.msi` / `_en-US.msi`（约 1.7 MB）
+- macOS：`Plume_0.1.0_universal.dmg`（Intel / Apple 芯片通用，约 3.4 MB）
 
 安装包未签名：Windows 若出现 SmartScreen 提示，点「更多信息 → 仍要运行」；macOS 首次打开请在「应用程序」里右键 →「打开」。
 
 ## 相比主流浏览器的优势
 
-| | LiteBrowser v0.1.0 | Chrome | Firefox | Edge / Safari |
+| | Plume 羽览 v0.1.0 | Chrome | Firefox | Edge / Safari |
 |---|---|---|---|---|
 | Windows 安装包 | 约 1.3 MB（NSIS）/ 约 1.7 MB（MSI） | 约 167 MB（离线安装包） | 约 95 MB | 系统自带 |
 | macOS 安装包 | 约 3.4 MB（Universal DMG） | 约 276 MB（Universal DMG） | 约 165 MB | Safari 系统自带 |
@@ -43,7 +43,7 @@
 
 ## Advantages over mainstream browsers
 
-| | LiteBrowser v0.1.0 | Chrome | Firefox | Edge / Safari |
+| | Plume 羽览 v0.1.0 | Chrome | Firefox | Edge / Safari |
 |---|---|---|---|---|
 | Windows installer | ~1.3 MB (NSIS) / ~1.7 MB (MSI) | ~167 MB (offline installer) | ~95 MB | Built into the OS |
 | macOS installer | ~3.4 MB (universal DMG) | ~276 MB (universal DMG) | ~165 MB | Safari ships with macOS |
@@ -52,7 +52,7 @@
 
 > Mainstream sizes are the file sizes of the official downloads checked on 2026-10-19 (Chrome official offline installer and Mac DMG; Firefox 158.0 en-US). They are approximate and change between versions.
 
-- **Tiny**: no bundled engine. LiteBrowser uses the system WebView2 (Windows) or WKWebView (macOS), so the installer is only a few MB.
+- **Tiny**: no bundled engine. Plume uses the system WebView2 (Windows) or WKWebView (macOS), so the installer is only a few MB.
 - **No sign-in**: no accounts and no sync.
 - **Local-only history**: stored in `history.json` in the app data folder, with search, per-item delete and clear all.
 - **No telemetry**: this project's code has no analytics, telemetry or ads, and makes no network requests of its own; only the pages you open go online.
@@ -79,7 +79,7 @@
 
 ## 隐私
 
-没有账号、没有统计、没有广告。浏览历史保存在本机应用数据目录的 `history.json` 中（Windows：`%APPDATA%\com.kevinyuzekai.litebrowser`，macOS：`~/Library/Application Support/com.kevinyuzekai.litebrowser`），网页 Cookie 由系统 WebView 管理。
+没有账号、没有统计、没有广告。浏览历史保存在本机应用数据目录的 `history.json` 中（Windows：`%APPDATA%\com.kevinyuzekai.plume`，macOS：`~/Library/Application Support/com.kevinyuzekai.plume`），网页 Cookie 由系统 WebView 管理。
 
 ## 构建
 
@@ -94,6 +94,6 @@ npx tauri build
 
 ## English
 
-LiteBrowser is a tiny desktop browser built with Tauri v2 on the system WebView. No account, URL-or-search address bar, tabs, new windows, and a local-only history view (search, delete, clear). MIT licensed.
+Plume (羽览) is a tiny desktop browser built with Tauri v2 on the system WebView. No account, URL-or-search address bar, tabs, new windows, and a local-only history view (search, delete, clear). MIT licensed.
 
 > CI：`.github/workflows/release.yml`（手动运行）在 macOS 上打 Universal DMG、在 Windows 上打 MSI，并上传到已有 Release（不会覆盖已有文件）。

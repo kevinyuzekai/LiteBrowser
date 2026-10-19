@@ -1,6 +1,6 @@
-# LiteBrowser — Store listing (English)
+# Plume — Store listing (English)
 
-**Product name**: LiteBrowser 轻量浏览器
+**Product name**: Plume 羽览
 **Category**: Productivity / Utilities
 **Price**: Free
 
@@ -8,7 +8,7 @@
 A super lightweight web browser. No sign-in, a few MB to install, and your history stays on your PC.
 
 ## Description
-LiteBrowser is built on the Microsoft Edge WebView2 runtime that ships with Windows, so it is small, starts fast and uses little memory.
+Plume is built on the Microsoft Edge WebView2 runtime that ships with Windows, so it is small, starts fast and uses little memory.
 
 - No account or sign-in required
 - Type a web address or a search into the address bar (Bing by default; Google, Baidu or DuckDuckGo available)
@@ -26,11 +26,11 @@ LiteBrowser is built on the Microsoft Edge WebView2 runtime that ships with Wind
 6. Chinese & English UI, dark mode
 
 ## Keywords
-browser; lightweight; web browser; fast; private
+Plume; browser; lightweight; web browser; fast; private
 
 ## Privacy
-LiteBrowser has no accounts and does not collect or upload any personal data; no ads, no analytics. Browsing history is stored only on your device (history.json in the app data folder) and can be deleted or cleared at any time from the History view; uninstalling removes it. Websites you visit handle data under their own privacy policies.
-Suggested privacy policy URL: https://github.com/kevinyuzekai/LiteBrowser#隐私
+Plume has no accounts and does not collect or upload any personal data; no ads, no analytics. Browsing history is stored only on your device (history.json in the app data folder) and can be deleted or cleared at any time from the History view; uninstalling removes it. Websites you visit handle data under their own privacy policies.
+Suggested privacy policy URL: https://github.com/kevinyuzekai/Plume#隐私
 
 ## What's new
 v0.1.0: First release.

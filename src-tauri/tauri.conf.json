@@ -1,9 +1,9 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "LiteBrowser",
-  "mainBinaryName": "LiteBrowser",
+  "productName": "Plume",
+  "mainBinaryName": "Plume",
   "version": "0.1.0",
-  "identifier": "com.kevinyuzekai.litebrowser",
+  "identifier": "com.kevinyuzekai.plume",
   "build": {
     "frontendDist": "../ui"
   },
@@ -19,7 +19,7 @@
     "targets": ["nsis", "msi", "dmg", "app"],
     "publisher": "kevinyuzekai",
     "category": "Utility",
-    "shortDescription": "LiteBrowser 轻量浏览器",
+    "shortDescription": "Plume 羽览",
     "longDescription": "A super lightweight web browser built on the system WebView. No account needed, local browsing history.",
     "copyright": "© 2026 kevinyuzekai",
     "icon": [

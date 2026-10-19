@@ -1,4 +1,4 @@
-// LiteBrowser 轻量浏览器 — a tiny Tauri v2 browser using the system WebView.
+// Plume 羽览 — a tiny Tauri v2 browser using the system WebView.
 // No accounts, no proxy features. History is stored locally only.
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -15,7 +15,7 @@ use tauri::{
 /// Height (logical px) of the tab strip + toolbar drawn by the UI webview.
 const TOP: f64 = 78.0;
 /// Reserved, never-resolving host used by page-side shortcut forwarding.
-const CMD_HOST: &str = "litebrowser-cmd.invalid";
+const CMD_HOST: &str = "plume-cmd.invalid";
 const MAX_HISTORY: usize = 5000;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -136,6 +136,28 @@ fn relayout(window: &Window) {
     };
     let ui_label = format!("ui-{}", window.label());
     for wv in window.webviews() {
+        // Linux: child webviews are packed into a GtkBox (positions are ignored),
+        // so give the UI strip a fixed height unless the overlay panel is open.
+        #[cfg(target_os = "linux")]
+        {
+            let is_ui = wv.label() == ui_label;
+            let content_h = (h - TOP).max(1.0) as i32;
+            let _ = wv.with_webview(move |pv| {
+                use gtk::prelude::*;
+                let w = pv.inner();
+                let (exp, req) = if is_ui {
+                    (overlay, if overlay { -1 } else { TOP as i32 })
+                } else {
+                    (true, if overlay { -1 } else { content_h })
+                };
+                w.set_size_request(-1, req);
+                if let Some(b) = w.parent().and_then(|p| p.downcast::<gtk::Box>().ok()) {
+                    b.set_homogeneous(false);
+                    b.set_child_packing(&w, exp, true, 0, gtk::PackType::Start);
+                    b.queue_resize();
+                }
+            });
+        }
         if wv.label() == ui_label {
             let _ = wv.set_position(LogicalPosition::new(0.0, 0.0));
             let _ = wv.set_size(LogicalSize::new(w, if overlay { h } else { TOP }));
@@ -180,7 +202,7 @@ fn parse_web_url(s: &str) -> Result<Url, String> {
 const PAGE_SCRIPT: &str = r#"
 (function(){
   if (window.top !== window) return;
-  var H = 'https://litebrowser-cmd.invalid/';
+  var H = 'https://plume-cmd.invalid/';
   function send(c){ try { window.location.href = H + c; } catch(e){} }
   window.addEventListener('keydown', function(e){
     var m = e.ctrlKey || e.metaKey; if (!m) { if (e.key === 'F5') { e.preventDefault(); send('reload'); } return; }
@@ -204,7 +226,7 @@ fn handle_cmd(app: &AppHandle, tab: &str, cmd: &str) {
             if let Some(win) = win {
                 let _ = app.emit_to(
                     tauri::EventTarget::webview(format!("ui-{win}")),
-                    "lb-cmd",
+                    "plume-cmd",
                     serde_json::json!({ "tab": tab, "cmd": cmd }),
                 );
             }
@@ -256,16 +278,16 @@ fn build_tab(app: &AppHandle, window: &Window, url: Url) -> Result<String, Strin
             } else {
                 record_visit(&a2, &l2, &u);
             }
-            emit_ui(&a2, &l2, "lb-url", serde_json::json!({ "tab": l2, "url": u.as_str(), "loading": loading }));
+            emit_ui(&a2, &l2, "plume-url", serde_json::json!({ "tab": l2, "url": u.as_str(), "loading": loading }));
         })
         .on_document_title_changed(move |wv, title| {
             record_title(&a3, &l3, wv.url().ok(), &title);
-            emit_ui(&a3, &l3, "lb-title", serde_json::json!({ "tab": l3, "title": title }));
+            emit_ui(&a3, &l3, "plume-title", serde_json::json!({ "tab": l3, "title": title }));
         })
         .on_new_window(move |u, _f| {
             // target=_blank / window.open -> open as a new tab in this window
             if matches!(u.scheme(), "http" | "https") {
-                emit_ui(&a4, &l4, "lb-cmd", serde_json::json!({ "tab": l4, "cmd": "open", "url": u.as_str() }));
+                emit_ui(&a4, &l4, "plume-cmd", serde_json::json!({ "tab": l4, "cmd": "open", "url": u.as_str() }));
             }
             NewWindowResponse::Deny
         });
@@ -403,7 +425,7 @@ fn open_window(app: &AppHandle, _url: Option<Url>) -> tauri::Result<()> {
     let n = state.next_id.fetch_add(1, Ordering::SeqCst);
     let label = format!("w{n}");
     let window = WindowBuilder::new(app, &label)
-        .title("LiteBrowser 轻量浏览器")
+        .title("Plume 羽览")
         .inner_size(1200.0, 800.0)
         .min_inner_size(480.0, 320.0)
         .build()?;
@@ -463,5 +485,5 @@ pub fn run() {
             Ok(())
         })
         .run(tauri::generate_context!())
-        .expect("error while running LiteBrowser");
+        .expect("error while running Plume");
 }

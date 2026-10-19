@@ -1,4 +1,4 @@
-// LiteBrowser UI (browser chrome). Pages are separate native webviews managed by Rust.
+// Plume UI (browser chrome). Pages are separate native webviews managed by Rust.
 (function () {
   'use strict';
   var T = window.__TAURI__;
@@ -12,14 +12,14 @@
       lang: '界面语言', newTabTitle: '新标签页', confirmClear: '确定清空全部历史记录吗？', del: '删除',
       today: '今天', yesterday: '昨天', closeTab: '关闭标签页',
       keys: '快捷键（Mac 用 Cmd）：\nCtrl+L 地址栏　Ctrl+R / F5 刷新　Ctrl+[ 后退　Ctrl+] 前进\nCtrl+Y 历史记录　Ctrl+T 新标签页　Ctrl+W 关闭标签页　Ctrl+N 新窗口',
-      about: 'LiteBrowser 轻量浏览器 v0.1.0 · 无需登录 · 历史记录只保存在本机' },
+      about: '羽览 Plume v0.1.0 · 无需登录 · 历史记录只保存在本机' },
     en: { back: 'Back (Ctrl+[)', forward: 'Forward (Ctrl+])', reload: 'Reload (Ctrl+R)', home: 'Home', history: 'History',
       settings: 'Settings', newTab: 'New tab (Ctrl+T)', addr: 'Enter a URL or search', searchHistory: 'Search history',
       clearAll: 'Clear all', close: 'Close', empty: 'No history yet', engine: 'Search engine', homeUrl: 'Home page',
       lang: 'Language', newTabTitle: 'New tab', confirmClear: 'Clear all browsing history?', del: 'Delete',
       today: 'Today', yesterday: 'Yesterday', closeTab: 'Close tab',
       keys: 'Shortcuts (Cmd on Mac):\nCtrl+L address bar  Ctrl+R / F5 reload  Ctrl+[ back  Ctrl+] forward\nCtrl+Y history  Ctrl+T new tab  Ctrl+W close tab  Ctrl+N new window',
-      about: 'LiteBrowser v0.1.0 · No account needed · History is stored only on this device' }
+      about: 'Plume v0.1.0 · No account needed · History is stored only on this device' }
   };
   var ENGINES = {
     bing: { home: 'https://www.bing.com/', q: 'https://www.bing.com/search?q=' },
@@ -28,9 +28,9 @@
     ddg: { home: 'https://duckduckgo.com/', q: 'https://duckduckgo.com/?q=' }
   };
   var S = {
-    engine: localStorage.getItem('lb.engine') || 'bing',
-    home: localStorage.getItem('lb.home') || '',
-    lang: localStorage.getItem('lb.lang') || (/^zh/i.test(navigator.language || '') ? 'zh' : 'en')
+    engine: localStorage.getItem('plume.engine') || 'bing',
+    home: localStorage.getItem('plume.home') || '',
+    lang: localStorage.getItem('plume.lang') || (/^zh/i.test(navigator.language || '') ? 'zh' : 'en')
   };
   function L(k) { return (I18N[S.lang] || I18N.en)[k] || I18N.en[k] || k; }
   function applyLang() {
@@ -77,7 +77,7 @@
     });
     var t = tab(active);
     if (document.activeElement !== $('addr')) $('addr').value = t && t.url && t.url !== 'about:blank' ? t.url : '';
-    document.title = (t && t.title ? t.title + ' - ' : '') + 'LiteBrowser';
+    document.title = (t && t.title ? t.title + ' - ' : '') + (S.lang === 'zh' ? '羽览' : 'Plume');
   }
   function newTab(url, focusAddr) {
     hidePanel(true);
@@ -177,15 +177,15 @@
   });
 
   // ---- events from Rust ----
-  listen('lb-url', function (ev) {
+  listen('plume-url', function (ev) {
     var p = ev.payload, t = tab(p.tab); if (!t) return;
     t.url = p.url; t.loading = p.loading; renderTabs();
   });
-  listen('lb-title', function (ev) {
+  listen('plume-title', function (ev) {
     var p = ev.payload, t = tab(p.tab); if (!t) return;
     t.title = p.title; renderTabs();
   });
-  listen('lb-cmd', function (ev) {
+  listen('plume-cmd', function (ev) {
     var p = ev.payload; if (p.cmd !== 'open' && !tab(p.tab)) return;
     command(p.cmd, p.url);
   });
@@ -204,13 +204,13 @@
   document.querySelectorAll('.close').forEach(function (b) { b.onclick = function () { hidePanel(); }; });
   $('hq').oninput = function () { clearTimeout(hTimer); hTimer = setTimeout(loadHistory, 150); };
   $('hclear').onclick = function () { if (confirm(L('confirmClear'))) invoke('history_clear').then(loadHistory); };
-  $('engine').onchange = function () { S.engine = this.value; localStorage.setItem('lb.engine', S.engine); };
+  $('engine').onchange = function () { S.engine = this.value; localStorage.setItem('plume.engine', S.engine); };
   $('homeurl').onchange = function () {
     var v = this.value.trim(); var u = v ? toUrl(v) : '';
     if (u && !/^https?:/.test(u)) u = '';
-    S.home = u; this.value = u; localStorage.setItem('lb.home', u);
+    S.home = u; this.value = u; localStorage.setItem('plume.home', u);
   };
-  $('lang').onchange = function () { S.lang = this.value; localStorage.setItem('lb.lang', S.lang); applyLang(); };
+  $('lang').onchange = function () { S.lang = this.value; localStorage.setItem('plume.lang', S.lang); applyLang(); };
 
   applyLang();
   newTab();

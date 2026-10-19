@@ -1705,17 +1705,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "litebrowser"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "url",
-]
-
-[[package]]
 name = "litemap"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2231,6 +2220,19 @@ dependencies = [
  "quick-xml",
  "serde",
  "time",
+]
+
+[[package]]
+name = "plume"
+version = "0.1.0"
+dependencies = [
+ "gtk",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "url",
+ "webkit2gtk",
 ]
 
 [[package]]
