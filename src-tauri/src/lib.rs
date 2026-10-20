@@ -330,7 +330,7 @@ async fn tab_create(app: AppHandle, webview: Webview, url: String) -> Result<Str
 #[tauri::command]
 async fn tab_show(app: AppHandle, webview: Webview, tab: String) -> Result<(), String> {
     ensure_ui(&webview)?;
-    find_tab(&app, &tab)?;
+    let wv = find_tab(&app, &tab)?;
     let window = webview.window();
     {
         let state = app.state::<AppState>();
@@ -338,6 +338,8 @@ async fn tab_show(app: AppHandle, webview: Webview, tab: String) -> Result<(), S
         wins.entry(window.label().to_string()).or_default().active = Some(tab);
     }
     relayout(&window);
+    // keep keyboard shortcuts (Ctrl/Cmd+W etc.) working after the focused tab was closed
+    let _ = wv.set_focus();
     Ok(())
 }
 
