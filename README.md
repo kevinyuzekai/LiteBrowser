@@ -1,6 +1,6 @@
-# Plume 羽览
+# Plume Browser
 
-羽览（Plume）是一个超轻量的桌面网页浏览器：基于系统自带的 WebView（Windows 用 WebView2，macOS 用 WKWebView），安装包只有几 MB。
+Plume Browser 是一个超轻量的桌面网页浏览器：基于系统自带的 WebView（Windows 用 WebView2，macOS 用 WKWebView），安装包只有几 MB。
 
 - **无需登录**，打开就能用；地址栏可输入网址或直接搜索（默认 Bing，可在设置里换成 Google / 百度 / DuckDuckGo）
 - 后退 / 前进 / 刷新 / 主页、多标签页、新窗口
@@ -19,7 +19,7 @@
 
 ## 相比主流浏览器的优势
 
-| | Plume 羽览 v0.1.1 | Chrome | Firefox | Edge / Safari |
+| | Plume Browser v0.1.1 | Chrome | Firefox | Edge / Safari |
 |---|---|---|---|---|
 | Windows 安装包 | 约 1.4 MB（NSIS）/ 约 1.8 MB（MSI） | 约 167 MB（离线安装包） | 约 95 MB | 系统自带 |
 | macOS 安装包 | 约 5.2 MB（Universal DMG） | 约 276 MB（Universal DMG） | 约 165 MB | Safari 系统自带 |
@@ -44,7 +44,7 @@
 
 ## Advantages over mainstream browsers
 
-| | Plume 羽览 v0.1.1 | Chrome | Firefox | Edge / Safari |
+| | Plume Browser v0.1.1 | Chrome | Firefox | Edge / Safari |
 |---|---|---|---|---|
 | Windows installer | ~1.4 MB (NSIS) / ~1.8 MB (MSI) | ~167 MB (offline installer) | ~95 MB | Built into the OS |
 | macOS installer | ~5.2 MB (universal DMG) | ~276 MB (universal DMG) | ~165 MB | Safari ships with macOS |
@@ -95,6 +95,6 @@ npx tauri build
 
 ## English
 
-Plume (羽览) is a tiny desktop browser built with Tauri v2 on the system WebView. No account, URL-or-search address bar, tabs, new windows, and a local-only history view (search, delete, clear). MIT licensed.
+Plume Browser is a tiny desktop browser built with Tauri v2 on the system WebView. No account, URL-or-search address bar, tabs, new windows, and a local-only history view (search, delete, clear). MIT licensed.
 
 > CI：`.github/workflows/release.yml`（手动运行）在 macOS 上打 Universal DMG、在 Windows 上打 MSI，并上传到已有 Release（不会覆盖已有文件）。
