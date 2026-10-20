@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Plume 羽览 — MSIX 清单模板（由 build-msix.sh 按 identity.env 填值） -->
+<!-- Plume Browser — MSIX 清单模板（由 build-msix.sh 按 identity.env 填值） -->
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
          xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
          xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
@@ -21,11 +21,11 @@
   <Applications>
     <Application Id="Plume" Executable="Plume.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements DisplayName="@DISPLAY_NAME@"
-                          Description="Plume 羽览"
+                          Description="Plume Browser"
                           BackgroundColor="transparent"
                           Square150x150Logo="assets\Square150x150Logo.png"
                           Square44x44Logo="assets\Square44x44Logo.png">
-        <uap:DefaultTile Square71x71Logo="assets\Square71x71Logo.png" Square310x310Logo="assets\Square310x310Logo.png" ShortName="Plume">
+        <uap:DefaultTile Square71x71Logo="assets\Square71x71Logo.png" Square310x310Logo="assets\Square310x310Logo.png" ShortName="Plume Browser">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo" />
           </uap:ShowNameOnTiles>

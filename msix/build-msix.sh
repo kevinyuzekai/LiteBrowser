@@ -1,9 +1,9 @@
 #!/bin/bash
-# Plume 羽览 — 生成 Microsoft Store 用 MSIX（x64，未签名；商店发布时由微软签名）
+# Plume Browser — 生成 Microsoft Store 用 MSIX（x64，未签名；商店发布时由微软签名）
 # 用法：
 #   ./build-msix.sh                         # 用 identity.env 里的值
 #   ./build-msix.sh <IdentityName> <Publisher> <PublisherDisplayName> [Version]   # 命令行覆盖
-#   DISPLAY_NAME="Plume" ./build-msix.sh ...                                 # 覆盖显示名称
+#   DISPLAY_NAME="Plume Browser" ./build-msix.sh ...                                 # 覆盖显示名称
 # 需要 Windows 版 Plume.exe：默认取 ../../Plume/src-tauri/target/x86_64-pc-windows-msvc/release/Plume.exe，
 # 也可用 EXE=/path/Plume.exe 指定。
 set -euo pipefail

@@ -1,4 +1,4 @@
-// Plume 羽览 — a tiny Tauri v2 browser using the system WebView.
+// Plume Browser — a tiny Tauri v2 browser using the system WebView.
 // No accounts, no proxy features. History is stored locally only.
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -447,7 +447,7 @@ fn open_window(app: &AppHandle, _url: Option<Url>) -> tauri::Result<()> {
     let n = state.next_id.fetch_add(1, Ordering::SeqCst);
     let label = format!("w{n}");
     let window = WindowBuilder::new(app, &label)
-        .title("Plume 羽览")
+        .title("Plume Browser")
         .inner_size(1200.0, 800.0)
         .min_inner_size(480.0, 320.0)
         .build()?;
@@ -479,8 +479,8 @@ fn open_window(app: &AppHandle, _url: Option<Url>) -> tauri::Result<()> {
 fn setup_macos_menu(app: &AppHandle) -> tauri::Result<()> {
     use tauri::menu::{Menu, MenuItem, PredefinedMenuItem, Submenu};
     let item = |id: &str, label: &str, acc: &str| MenuItem::with_id(app, id, label, true, Some(acc));
-    let app_menu = Submenu::with_items(app, "Plume", true, &[
-        &PredefinedMenuItem::about(app, Some("About Plume"), None)?,
+    let app_menu = Submenu::with_items(app, "Plume Browser", true, &[
+        &PredefinedMenuItem::about(app, Some("About Plume Browser"), None)?,
         &PredefinedMenuItem::separator(app)?,
         &PredefinedMenuItem::hide(app, None)?,
         &PredefinedMenuItem::hide_others(app, None)?,

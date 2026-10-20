@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Plume",
+  "productName": "Plume Browser",
   "mainBinaryName": "Plume",
   "version": "0.1.1",
   "identifier": "com.kevinyuzekai.plume",
@@ -24,7 +24,7 @@
     ],
     "publisher": "kevinyuzekai",
     "category": "Utility",
-    "shortDescription": "Plume 羽览",
+    "shortDescription": "Plume Browser",
     "longDescription": "A super lightweight web browser built on the system WebView. No account needed, local browsing history.",
     "copyright": "© 2026 kevinyuzekai",
     "icon": [

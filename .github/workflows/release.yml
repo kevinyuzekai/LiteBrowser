@@ -43,6 +43,6 @@ jobs:
         run: |
           existing="$(gh release view "$TAG" --json assets -q '.assets[].name')"
           for f in ${{ matrix.glob }}; do
-            n="$(basename "$f")"
+            n="$(basename "$f")"; n="${n// /.}"  # GitHub turns spaces in asset names into dots
             if printf '%s\n' "$existing" | grep -qxF "$n"; then echo "skip existing $n"; else gh release upload "$TAG" "$f"; fi
           done

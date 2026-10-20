@@ -1,6 +1,6 @@
-# Plume — Store listing (English)
+# Plume Browser — Store listing (English)
 
-**Product name**: Plume 羽览
+**Product name**: Plume Browser
 **Category**: Productivity / Utilities
 **Price**: Free
 
@@ -8,7 +8,7 @@
 A super lightweight web browser. No sign-in, a few MB to install, and your history stays on your PC.
 
 ## Description
-Plume is built on the Microsoft Edge WebView2 runtime that ships with Windows, so it is small, starts fast and uses little memory.
+Plume Browser is built on the Microsoft Edge WebView2 runtime that ships with Windows, so it is small, starts fast and uses little memory.
 
 - No account or sign-in required
 - Type a web address or a search into the address bar (Bing by default; Google, Baidu or DuckDuckGo available)
@@ -29,7 +29,7 @@ Plume is built on the Microsoft Edge WebView2 runtime that ships with Windows, s
 Plume; browser; lightweight; web browser; fast; private
 
 ## Privacy
-Plume has no accounts and does not collect or upload any personal data; no ads, no analytics. Browsing history is stored only on your device (history.json in the app data folder) and can be deleted or cleared at any time from the History view; uninstalling removes it. Websites you visit handle data under their own privacy policies.
+Plume Browser has no accounts and does not collect or upload any personal data; no ads, no analytics. Browsing history is stored only on your device (history.json in the app data folder) and can be deleted or cleared at any time from the History view; uninstalling removes it. Websites you visit handle data under their own privacy policies.
 Suggested privacy policy URL: https://github.com/kevinyuzekai/Plume#隐私
 
 ## What's new

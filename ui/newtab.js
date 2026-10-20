@@ -14,8 +14,8 @@
   };
   var E = ENGINES[engine] || ENGINES.bing;
   var T = {
-    zh: { title: '新标签页', brand: '羽览', ph: '用 ' + E.name + ' 搜索，或输入网址', add: '添加快捷方式', name: '名称', url: '网址', save: '完成', cancel: '取消', del: '移除' },
-    en: { title: 'New tab', brand: 'Plume', ph: 'Search ' + E.name + ' or type a URL', add: 'Add shortcut', name: 'Name', url: 'URL', save: 'Done', cancel: 'Cancel', del: 'Remove' }
+    zh: { title: '新标签页', brand: 'Plume Browser', ph: '用 ' + E.name + ' 搜索，或输入网址', add: '添加快捷方式', name: '名称', url: '网址', save: '完成', cancel: '取消', del: '移除' },
+    en: { title: 'New tab', brand: 'Plume Browser', ph: 'Search ' + E.name + ' or type a URL', add: 'Add shortcut', name: 'Name', url: 'URL', save: 'Done', cancel: 'Cancel', del: 'Remove' }
   }[lang];
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
   document.title = T.title;
