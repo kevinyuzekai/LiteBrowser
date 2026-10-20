@@ -11,15 +11,15 @@
 
 到 [Releases](../../releases) 下载：
 
-- Windows：`Plume_0.1.0_x64-setup.exe`（约 1.3 MB，推荐）或 `Plume_0.1.0_x64_zh-CN.msi` / `_en-US.msi`（约 1.7 MB）
-- macOS：`Plume_0.1.0_universal.dmg`（Intel / Apple 芯片通用，约 3.4 MB）
+- Windows：`Plume_0.1.1_x64-setup.exe`（约 1.3 MB，推荐）或 `Plume_0.1.1_x64_zh-CN.msi` / `_en-US.msi`（约 1.7 MB）
+- macOS：`Plume_0.1.1_universal.dmg`（Intel / Apple 芯片通用，约 3.4 MB）
 - 微软商店 / Microsoft Store：[Plume Browser](https://apps.microsoft.com/detail/9NHJ2KGT51X3)（Windows，商店自动更新，无 SmartScreen 提示）
 
 安装包未签名：Windows 若出现 SmartScreen 提示，点「更多信息 → 仍要运行」；macOS 首次打开请在「应用程序」里右键 →「打开」。
 
 ## 相比主流浏览器的优势
 
-| | Plume 羽览 v0.1.0 | Chrome | Firefox | Edge / Safari |
+| | Plume 羽览 v0.1.1 | Chrome | Firefox | Edge / Safari |
 |---|---|---|---|---|
 | Windows 安装包 | 约 1.3 MB（NSIS）/ 约 1.7 MB（MSI） | 约 167 MB（离线安装包） | 约 95 MB | 系统自带 |
 | macOS 安装包 | 约 3.4 MB（Universal DMG） | 约 276 MB（Universal DMG） | 约 165 MB | Safari 系统自带 |
@@ -37,14 +37,14 @@
 ### 局限
 
 - 不支持扩展 / 插件
-- 没有同步、密码管理器和书签（v0.1.0）
+- 没有同步、密码管理器和书签（v0.1.1）
 - 没有下载管理界面
 - 网页显示效果取决于系统 WebView：Windows 需要 WebView2 运行时（Win10/11 一般自带），macOS 取决于系统 Safari 的版本
 - 安装包没有签名，第一次打开时系统可能会提示
 
 ## Advantages over mainstream browsers
 
-| | Plume 羽览 v0.1.0 | Chrome | Firefox | Edge / Safari |
+| | Plume 羽览 v0.1.1 | Chrome | Firefox | Edge / Safari |
 |---|---|---|---|---|
 | Windows installer | ~1.3 MB (NSIS) / ~1.7 MB (MSI) | ~167 MB (offline installer) | ~95 MB | Built into the OS |
 | macOS installer | ~3.4 MB (universal DMG) | ~276 MB (universal DMG) | ~165 MB | Safari ships with macOS |
@@ -62,7 +62,7 @@
 ### Limitations
 
 - No extensions
-- No sync, password manager or bookmarks (v0.1.0)
+- No sync, password manager or bookmarks (v0.1.1)
 - No download manager
 - Rendering depends on the system WebView: Windows needs the WebView2 runtime (usually preinstalled on Windows 10/11), and macOS depends on the system Safari version
 - Installers are unsigned, so the OS may warn the first time you open the app

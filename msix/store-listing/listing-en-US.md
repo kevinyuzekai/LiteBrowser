@@ -33,4 +33,5 @@ Plume has no accounts and does not collect or upload any personal data; no ads, 
 Suggested privacy policy URL: https://github.com/kevinyuzekai/Plume#隐私
 
 ## What's new
+v0.1.1: Fixed closing tabs/windows (incl. Windows freeze on new tab), real browsing with back/forward/reload, new dark new tab page with editable shortcuts, macOS menu and shortcuts.
 v0.1.0: First release.

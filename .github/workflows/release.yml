@@ -4,7 +4,7 @@ on:
     inputs:
       tag:
         description: 'Existing release tag to upload to'
-        default: 'v0.1.0'
+        default: 'v0.1.1'
 
 permissions:
   contents: write
@@ -39,7 +39,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ inputs.tag || 'v0.1.0' }}
+          TAG: ${{ inputs.tag || 'v0.1.1' }}
         run: |
           existing="$(gh release view "$TAG" --json assets -q '.assets[].name')"
           for f in ${{ matrix.glob }}; do
