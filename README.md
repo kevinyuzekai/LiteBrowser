@@ -11,8 +11,8 @@
 
 到 [Releases](../../releases) 下载：
 
-- Windows：`Plume_0.1.1_x64-setup.exe`（约 1.3 MB，推荐）或 `Plume_0.1.1_x64_zh-CN.msi` / `_en-US.msi`（约 1.7 MB）
-- macOS：`Plume_0.1.1_universal.dmg`（Intel / Apple 芯片通用，约 3.4 MB）
+- Windows：`Plume_0.1.1_x64-setup.exe`（约 1.4 MB，推荐）或 `Plume_0.1.1_x64_zh-CN.msi` / `_en-US.msi`（约 1.8 MB）
+- macOS：`Plume_0.1.1_universal.dmg`（Intel / Apple 芯片通用，约 5.2 MB）
 - 微软商店 / Microsoft Store：[Plume Browser](https://apps.microsoft.com/detail/9NHJ2KGT51X3)（Windows，商店自动更新，无 SmartScreen 提示）
 
 安装包未签名：Windows 若出现 SmartScreen 提示，点「更多信息 → 仍要运行」；macOS 首次打开请在「应用程序」里右键 →「打开」。
@@ -21,8 +21,8 @@
 
 | | Plume 羽览 v0.1.1 | Chrome | Firefox | Edge / Safari |
 |---|---|---|---|---|
-| Windows 安装包 | 约 1.3 MB（NSIS）/ 约 1.7 MB（MSI） | 约 167 MB（离线安装包） | 约 95 MB | 系统自带 |
-| macOS 安装包 | 约 3.4 MB（Universal DMG） | 约 276 MB（Universal DMG） | 约 165 MB | Safari 系统自带 |
+| Windows 安装包 | 约 1.4 MB（NSIS）/ 约 1.8 MB（MSI） | 约 167 MB（离线安装包） | 约 95 MB | 系统自带 |
+| macOS 安装包 | 约 5.2 MB（Universal DMG） | 约 276 MB（Universal DMG） | 约 165 MB | Safari 系统自带 |
 | 网页内核 | 系统 WebView（WebView2 / WKWebView），不自带内核 | 自带 Chromium | 自带 Gecko | 系统内核 |
 | 账号 / 同步 | 没有 | 可选 Google 账号同步 | 可选 Firefox 账号同步 | 可选微软 / Apple 账号同步 |
 
@@ -46,8 +46,8 @@
 
 | | Plume 羽览 v0.1.1 | Chrome | Firefox | Edge / Safari |
 |---|---|---|---|---|
-| Windows installer | ~1.3 MB (NSIS) / ~1.7 MB (MSI) | ~167 MB (offline installer) | ~95 MB | Built into the OS |
-| macOS installer | ~3.4 MB (universal DMG) | ~276 MB (universal DMG) | ~165 MB | Safari ships with macOS |
+| Windows installer | ~1.4 MB (NSIS) / ~1.8 MB (MSI) | ~167 MB (offline installer) | ~95 MB | Built into the OS |
+| macOS installer | ~5.2 MB (universal DMG) | ~276 MB (universal DMG) | ~165 MB | Safari ships with macOS |
 | Engine | System WebView (WebView2 / WKWebView), no bundled engine | Bundled Chromium | Bundled Gecko | System engine |
 | Account / sync | None | Optional Google sync | Optional Firefox account sync | Optional Microsoft / Apple sync |
 
