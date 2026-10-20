@@ -13,6 +13,7 @@
 
 - Windows：`Plume_0.1.0_x64-setup.exe`（约 1.3 MB，推荐）或 `Plume_0.1.0_x64_zh-CN.msi` / `_en-US.msi`（约 1.7 MB）
 - macOS：`Plume_0.1.0_universal.dmg`（Intel / Apple 芯片通用，约 3.4 MB）
+- 微软商店 / Microsoft Store：[Plume Browser](https://apps.microsoft.com/detail/9NHJ2KGT51X3)（Windows，商店自动更新，无 SmartScreen 提示）
 
 安装包未签名：Windows 若出现 SmartScreen 提示，点「更多信息 → 仍要运行」；macOS 首次打开请在「应用程序」里右键 →「打开」。
 
