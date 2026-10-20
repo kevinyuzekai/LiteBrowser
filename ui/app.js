@@ -12,14 +12,14 @@
       lang: '界面语言', homeHint: '留空 = 新标签页', newTabTitle: '新标签页', confirmClear: '再点一次确认清空', del: '删除',
       today: '今天', yesterday: '昨天', closeTab: '关闭标签页',
       keys: '快捷键（Mac 用 Cmd）：\nCtrl+L 地址栏　Ctrl+R / F5 刷新　Ctrl+[ 后退　Ctrl+] 前进\nCtrl+Y 历史记录　Ctrl+T 新标签页　Ctrl+W 关闭标签页　Ctrl+N 新窗口',
-      about: 'Plume Browser v0.1.1 · 无需登录 · 历史记录只保存在本机' },
+      about: 'Plume Browser v0.1.2 · 无需登录 · 历史记录只保存在本机' },
     en: { back: 'Back (Ctrl+[)', forward: 'Forward (Ctrl+])', reload: 'Reload (Ctrl+R)', home: 'Home', history: 'History',
       settings: 'Settings', newTab: 'New tab (Ctrl+T)', addr: 'Enter a URL or search', searchHistory: 'Search history',
       clearAll: 'Clear all', close: 'Close', empty: 'No history yet', engine: 'Search engine', homeUrl: 'Home page',
       lang: 'Language', homeHint: 'Empty = new tab page', newTabTitle: 'New tab', confirmClear: 'Click again to clear', del: 'Delete',
       today: 'Today', yesterday: 'Yesterday', closeTab: 'Close tab',
       keys: 'Shortcuts (Cmd on Mac):\nCtrl+L address bar  Ctrl+R / F5 reload  Ctrl+[ back  Ctrl+] forward\nCtrl+Y history  Ctrl+T new tab  Ctrl+W close tab  Ctrl+N new window',
-      about: 'Plume Browser v0.1.1 · No account needed · History is stored only on this device' }
+      about: 'Plume Browser v0.1.2 · No account needed · History is stored only on this device' }
   };
   var ENGINES = {
     bing: { home: 'https://www.bing.com/', q: 'https://www.bing.com/search?q=' },

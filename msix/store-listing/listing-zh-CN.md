@@ -33,5 +33,6 @@ Plume Browser 没有账号系统，不收集、不上传任何个人信息，不
 隐私政策网址（建议）：https://github.com/kevinyuzekai/Plume#隐私
 
 ## 版本说明（What's new）
+v0.1.2：更名为 Plume Browser（窗口标题、新标签页、关于、快捷方式）。设置与历史记录保留。
 v0.1.1：修复标签/窗口关闭（含 Windows 新建标签卡死）、正常浏览与前进后退刷新，新增深色新标签页（可编辑快捷方式）、macOS 菜单与快捷键。
 v0.1.0：首个版本。
