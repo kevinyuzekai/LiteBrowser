@@ -9,14 +9,14 @@
     zh: { back: '后退 (Ctrl+[)', forward: '前进 (Ctrl+])', reload: '刷新 (Ctrl+R)', home: '主页', history: '历史记录',
       settings: '设置', newTab: '新标签页 (Ctrl+T)', addr: '输入网址或搜索内容', searchHistory: '搜索历史记录',
       clearAll: '清空全部', close: '关闭', empty: '还没有历史记录', engine: '默认搜索引擎', homeUrl: '主页网址',
-      lang: '界面语言', newTabTitle: '新标签页', confirmClear: '确定清空全部历史记录吗？', del: '删除',
+      lang: '界面语言', homeHint: '留空 = 新标签页', newTabTitle: '新标签页', confirmClear: '再点一次确认清空', del: '删除',
       today: '今天', yesterday: '昨天', closeTab: '关闭标签页',
       keys: '快捷键（Mac 用 Cmd）：\nCtrl+L 地址栏　Ctrl+R / F5 刷新　Ctrl+[ 后退　Ctrl+] 前进\nCtrl+Y 历史记录　Ctrl+T 新标签页　Ctrl+W 关闭标签页　Ctrl+N 新窗口',
       about: '羽览 Plume v0.1.0 · 无需登录 · 历史记录只保存在本机' },
     en: { back: 'Back (Ctrl+[)', forward: 'Forward (Ctrl+])', reload: 'Reload (Ctrl+R)', home: 'Home', history: 'History',
       settings: 'Settings', newTab: 'New tab (Ctrl+T)', addr: 'Enter a URL or search', searchHistory: 'Search history',
       clearAll: 'Clear all', close: 'Close', empty: 'No history yet', engine: 'Search engine', homeUrl: 'Home page',
-      lang: 'Language', newTabTitle: 'New tab', confirmClear: 'Clear all browsing history?', del: 'Delete',
+      lang: 'Language', homeHint: 'Empty = new tab page', newTabTitle: 'New tab', confirmClear: 'Click again to clear', del: 'Delete',
       today: 'Today', yesterday: 'Yesterday', closeTab: 'Close tab',
       keys: 'Shortcuts (Cmd on Mac):\nCtrl+L address bar  Ctrl+R / F5 reload  Ctrl+[ back  Ctrl+] forward\nCtrl+Y history  Ctrl+T new tab  Ctrl+W close tab  Ctrl+N new window',
       about: 'Plume v0.1.0 · No account needed · History is stored only on this device' }
@@ -41,12 +41,17 @@
     $('addr').placeholder = L('addr');
     renderTabs();
   }
-  function homeUrl() { return S.home || (ENGINES[S.engine] || ENGINES.bing).home; }
+  function newTabUrl() { return 'plume:newtab?lang=' + S.lang + '&engine=' + S.engine; }
+  function homeUrl() { return S.home || newTabUrl(); }
+  // the bundled new-tab page lives on the app origin (tauri://localhost or http://tauri.localhost)
+  function isInternal(u) { return /^plume:|^tauri:\/\/localhost\/|^https?:\/\/tauri\.localhost\//i.test(u || ''); }
+  function shownUrl(u) { return !u || u === 'about:blank' || isInternal(u) ? '' : u; }
 
   // ---- URL / search parsing ----
   function toUrl(input) {
     var s = (input || '').trim();
     if (!s) return null;
+    if (/^plume:/i.test(s)) return s;
     if (/^https?:\/\//i.test(s)) return s;
     if (/^about:blank$/i.test(s)) return 'about:blank';
     if (!/\s/.test(s)) {
@@ -67,7 +72,7 @@
       var d = document.createElement('div');
       d.className = 'tab' + (t.id === active ? ' on' : '') + (t.loading ? ' ld' : '');
       var s = document.createElement('span'); s.className = 'tt';
-      s.textContent = t.title || (t.url && t.url !== 'about:blank' ? hostOf(t.url) : L('newTabTitle'));
+      s.textContent = (!isInternal(t.url) && t.title) || (shownUrl(t.url) ? hostOf(t.url) : L('newTabTitle'));
       d.title = s.textContent;
       var x = document.createElement('button'); x.className = 'tx'; x.textContent = '\u00d7'; x.title = L('closeTab');
       x.onclick = function (e) { e.stopPropagation(); closeTab(t.id); };
@@ -76,9 +81,12 @@
       d.appendChild(s); d.appendChild(x); box.appendChild(d);
     });
     var t = tab(active);
-    if (document.activeElement !== $('addr')) $('addr').value = t && t.url && t.url !== 'about:blank' ? t.url : '';
+    if (shownTab !== active) addrDirty = false;
+    if (!addrDirty || document.activeElement !== $('addr') || shownTab !== active) $('addr').value = t ? shownUrl(t.url) : '';
+    shownTab = active;
     document.title = (t && t.title ? t.title + ' - ' : '') + (S.lang === 'zh' ? '羽览' : 'Plume');
   }
+  var shownTab = null, addrDirty = false;
   function newTab(url, focusAddr) {
     hidePanel(true);
     return invoke('tab_create', { url: url || homeUrl() }).then(function (id) {
@@ -97,10 +105,11 @@
     if (i < 0) return;
     invoke('tab_close', { tab: id }).catch(console.error);
     tabs.splice(i, 1);
-    if (!tabs.length) { newTab(); return; }
+    if (!tabs.length) { invoke('close_window').catch(console.error); return; }
     if (active === id) showTab(tabs[Math.min(i, tabs.length - 1)].id); else renderTabs();
   }
   function go(input) {
+    addrDirty = false;
     var u = toUrl(input); if (!u) return;
     if (!active) { newTab(u); return; }
     hidePanel(true);
@@ -186,11 +195,12 @@
     t.title = p.title; renderTabs();
   });
   listen('plume-cmd', function (ev) {
-    var p = ev.payload; if (p.cmd !== 'open' && !tab(p.tab)) return;
+    var p = ev.payload; if (p.tab && p.cmd !== 'open' && !tab(p.tab)) return;
     command(p.cmd, p.url);
   });
 
   // ---- wire up ----
+  $('addr').addEventListener('input', function () { addrDirty = true; });
   $('addrform').onsubmit = function (e) { e.preventDefault(); go($('addr').value); };
   $('addr').onfocus = function () { setTimeout(function () { $('addr').select(); }, 0); };
   $('addr').onblur = function () { renderTabs(); };
@@ -203,7 +213,14 @@
   $('setbtn').onclick = function () { togglePanel('sett'); };
   document.querySelectorAll('.close').forEach(function (b) { b.onclick = function () { hidePanel(); }; });
   $('hq').oninput = function () { clearTimeout(hTimer); hTimer = setTimeout(loadHistory, 150); };
-  $('hclear').onclick = function () { if (confirm(L('confirmClear'))) invoke('history_clear').then(loadHistory); };
+  // inline two-step confirm (native confirm() is not available in every system WebView)
+  var clearArmed = 0;
+  $('hclear').onclick = function () {
+    var b = this;
+    if (!clearArmed) { b.textContent = L('confirmClear'); clearArmed = setTimeout(function () { clearArmed = 0; b.textContent = L('clearAll'); }, 4000); return; }
+    clearTimeout(clearArmed); clearArmed = 0; b.textContent = L('clearAll');
+    invoke('history_clear').then(loadHistory);
+  };
   $('engine').onchange = function () { S.engine = this.value; localStorage.setItem('plume.engine', S.engine); };
   $('homeurl').onchange = function () {
     var v = this.value.trim(); var u = v ? toUrl(v) : '';

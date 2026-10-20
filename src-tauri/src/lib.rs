@@ -65,8 +65,12 @@ fn save_history(state: &AppState) {
     }
 }
 
+fn is_internal(u: &Url) -> bool {
+    u.scheme() == "tauri" || u.host_str() == Some("tauri.localhost")
+}
+
 fn recordable(u: &Url) -> bool {
-    matches!(u.scheme(), "http" | "https") && u.host_str() != Some(CMD_HOST)
+    matches!(u.scheme(), "http" | "https") && u.host_str() != Some(CMD_HOST) && !is_internal(u)
 }
 
 fn record_visit(app: &AppHandle, tab: &str, url: &Url) {
@@ -188,7 +192,14 @@ fn find_tab(app: &AppHandle, tab: &str) -> Result<Webview, String> {
     app.get_webview(tab).ok_or_else(|| "no such tab".to_string())
 }
 
-fn parse_web_url(s: &str) -> Result<Url, String> {
+/// Resolves the URL a tab should load. `plume:newtab?...` maps to the bundled
+/// new-tab page (served from the app origin, which differs per platform:
+/// tauri://localhost on macOS/Linux, http://tauri.localhost on Windows).
+fn resolve_url(ui: &Webview, s: &str) -> Result<Url, String> {
+    if let Some(q) = s.strip_prefix("plume:newtab") {
+        let base = ui.url().map_err(|e| e.to_string())?;
+        return base.join(&format!("newtab.html{q}")).map_err(|e| e.to_string());
+    }
     let u = Url::parse(s).map_err(|e| e.to_string())?;
     match u.scheme() {
         "http" | "https" => Ok(u),
@@ -261,11 +272,13 @@ fn build_tab(app: &AppHandle, window: &Window, url: Url) -> Result<String, Strin
                 let cmd = u.path().trim_start_matches('/').to_string();
                 let a = a1.clone();
                 let l = l1.clone();
-                let _ = a1.run_on_main_thread(move || handle_cmd(&a, &l, &cmd));
+                // Never create/close webviews inside a WebView2/WKWebView navigation callback:
+                // hand the command to a worker task, which dispatches to the main thread.
+                tauri::async_runtime::spawn(async move { handle_cmd(&a, &l, &cmd) });
                 return false;
             }
             // Only web pages; other schemes (mailto:, custom app links...) are ignored.
-            matches!(u.scheme(), "http" | "https" | "about" | "data" | "blob")
+            matches!(u.scheme(), "http" | "https" | "about" | "data" | "blob") || is_internal(u)
         })
         .on_page_load(move |_wv, p| {
             let u = p.url().clone();
@@ -299,10 +312,10 @@ fn build_tab(app: &AppHandle, window: &Window, url: Url) -> Result<String, Strin
 }
 
 #[tauri::command]
-fn tab_create(app: AppHandle, webview: Webview, url: String) -> Result<String, String> {
+async fn tab_create(app: AppHandle, webview: Webview, url: String) -> Result<String, String> {
     ensure_ui(&webview)?;
     let window = webview.window();
-    let label = build_tab(&app, &window, parse_web_url(&url)?)?;
+    let label = build_tab(&app, &window, resolve_url(&webview, &url)?)?;
     {
         let state = app.state::<AppState>();
         let mut wins = state.wins.lock().unwrap();
@@ -315,7 +328,7 @@ fn tab_create(app: AppHandle, webview: Webview, url: String) -> Result<String, S
 }
 
 #[tauri::command]
-fn tab_show(app: AppHandle, webview: Webview, tab: String) -> Result<(), String> {
+async fn tab_show(app: AppHandle, webview: Webview, tab: String) -> Result<(), String> {
     ensure_ui(&webview)?;
     find_tab(&app, &tab)?;
     let window = webview.window();
@@ -329,7 +342,7 @@ fn tab_show(app: AppHandle, webview: Webview, tab: String) -> Result<(), String>
 }
 
 #[tauri::command]
-fn tab_close(app: AppHandle, webview: Webview, tab: String) -> Result<(), String> {
+async fn tab_close(app: AppHandle, webview: Webview, tab: String) -> Result<(), String> {
     ensure_ui(&webview)?;
     let wv = find_tab(&app, &tab)?;
     let state = app.state::<AppState>();
@@ -340,16 +353,16 @@ fn tab_close(app: AppHandle, webview: Webview, tab: String) -> Result<(), String
 }
 
 #[tauri::command]
-fn tab_navigate(app: AppHandle, webview: Webview, tab: String, url: String) -> Result<(), String> {
+async fn tab_navigate(app: AppHandle, webview: Webview, tab: String, url: String) -> Result<(), String> {
     ensure_ui(&webview)?;
     let wv = find_tab(&app, &tab)?;
-    wv.navigate(parse_web_url(&url)?).map_err(|e| e.to_string())?;
+    wv.navigate(resolve_url(&webview, &url)?).map_err(|e| e.to_string())?;
     let _ = wv.set_focus();
     Ok(())
 }
 
 #[tauri::command]
-fn tab_action(app: AppHandle, webview: Webview, tab: String, action: String) -> Result<(), String> {
+async fn tab_action(app: AppHandle, webview: Webview, tab: String, action: String) -> Result<(), String> {
     ensure_ui(&webview)?;
     let wv = find_tab(&app, &tab)?;
     let js = match action.as_str() {
@@ -367,7 +380,7 @@ fn tab_action(app: AppHandle, webview: Webview, tab: String, action: String) -> 
 }
 
 #[tauri::command]
-fn set_overlay(app: AppHandle, webview: Webview, overlay: bool) -> Result<(), String> {
+async fn set_overlay(app: AppHandle, webview: Webview, overlay: bool) -> Result<(), String> {
     ensure_ui(&webview)?;
     let window = webview.window();
     {
@@ -383,13 +396,20 @@ fn set_overlay(app: AppHandle, webview: Webview, overlay: bool) -> Result<(), St
 }
 
 #[tauri::command]
-fn new_window(app: AppHandle, webview: Webview) -> Result<(), String> {
+async fn new_window(app: AppHandle, webview: Webview) -> Result<(), String> {
     ensure_ui(&webview)?;
     open_window(&app, None).map_err(|e| e.to_string())
 }
 
+/// Closes the window that owns this UI (used when the last tab is closed).
 #[tauri::command]
-fn history_list(app: AppHandle, webview: Webview, query: String, limit: Option<usize>) -> Result<Vec<Entry>, String> {
+async fn close_window(webview: Webview) -> Result<(), String> {
+    ensure_ui(&webview)?;
+    webview.window().destroy().map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+async fn history_list(app: AppHandle, webview: Webview, query: String, limit: Option<usize>) -> Result<Vec<Entry>, String> {
     ensure_ui(&webview)?;
     let q = query.trim().to_lowercase();
     let lim = limit.unwrap_or(500);
@@ -402,7 +422,7 @@ fn history_list(app: AppHandle, webview: Webview, query: String, limit: Option<u
 }
 
 #[tauri::command]
-fn history_delete(app: AppHandle, webview: Webview, id: u64) -> Result<(), String> {
+async fn history_delete(app: AppHandle, webview: Webview, id: u64) -> Result<(), String> {
     ensure_ui(&webview)?;
     let state = app.state::<AppState>();
     state.history.lock().unwrap().retain(|e| e.id != id);
@@ -411,7 +431,7 @@ fn history_delete(app: AppHandle, webview: Webview, id: u64) -> Result<(), Strin
 }
 
 #[tauri::command]
-fn history_clear(app: AppHandle, webview: Webview) -> Result<(), String> {
+async fn history_clear(app: AppHandle, webview: Webview) -> Result<(), String> {
     ensure_ui(&webview)?;
     let state = app.state::<AppState>();
     state.history.lock().unwrap().clear();
@@ -450,6 +470,76 @@ fn open_window(app: &AppHandle, _url: Option<Url>) -> tauri::Result<()> {
     Ok(())
 }
 
+/// macOS: the default app menu binds Cmd+W to "Close Window" (closing all tabs at once)
+/// and Cmd+N etc. are swallowed by the menu bar before the page sees them, so we install
+/// a browser menu whose accelerators drive the tab UI. Edit items keep copy/paste working.
+#[cfg(target_os = "macos")]
+fn setup_macos_menu(app: &AppHandle) -> tauri::Result<()> {
+    use tauri::menu::{Menu, MenuItem, PredefinedMenuItem, Submenu};
+    let item = |id: &str, label: &str, acc: &str| MenuItem::with_id(app, id, label, true, Some(acc));
+    let app_menu = Submenu::with_items(app, "Plume", true, &[
+        &PredefinedMenuItem::about(app, Some("About Plume"), None)?,
+        &PredefinedMenuItem::separator(app)?,
+        &PredefinedMenuItem::hide(app, None)?,
+        &PredefinedMenuItem::hide_others(app, None)?,
+        &PredefinedMenuItem::show_all(app, None)?,
+        &PredefinedMenuItem::separator(app)?,
+        &PredefinedMenuItem::quit(app, None)?,
+    ])?;
+    let file = Submenu::with_items(app, "File", true, &[
+        &item("newtab", "New Tab", "CmdOrCtrl+T")?,
+        &item("newwindow", "New Window", "CmdOrCtrl+N")?,
+        &item("focus", "Open Location…", "CmdOrCtrl+L")?,
+        &PredefinedMenuItem::separator(app)?,
+        &item("closetab", "Close Tab", "CmdOrCtrl+W")?,
+        &item("closewindow", "Close Window", "CmdOrCtrl+Shift+W")?,
+    ])?;
+    let edit = Submenu::with_items(app, "Edit", true, &[
+        &PredefinedMenuItem::undo(app, None)?,
+        &PredefinedMenuItem::redo(app, None)?,
+        &PredefinedMenuItem::separator(app)?,
+        &PredefinedMenuItem::cut(app, None)?,
+        &PredefinedMenuItem::copy(app, None)?,
+        &PredefinedMenuItem::paste(app, None)?,
+        &PredefinedMenuItem::select_all(app, None)?,
+    ])?;
+    let view = Submenu::with_items(app, "View", true, &[
+        &item("reload", "Reload", "CmdOrCtrl+R")?,
+        &item("back", "Back", "CmdOrCtrl+[")?,
+        &item("forward", "Forward", "CmdOrCtrl+]")?,
+        &PredefinedMenuItem::separator(app)?,
+        &item("history", "History", "CmdOrCtrl+Y")?,
+    ])?;
+    let window = Submenu::with_items(app, "Window", true, &[
+        &PredefinedMenuItem::minimize(app, None)?,
+        &PredefinedMenuItem::fullscreen(app, None)?,
+    ])?;
+    app.set_menu(Menu::with_items(app, &[&app_menu, &file, &edit, &view, &window])?)?;
+    app.on_menu_event(|app, event| {
+        let id = event.id().as_ref().to_string();
+        let app = app.clone();
+        tauri::async_runtime::spawn(async move {
+            if id == "newwindow" {
+                let _ = open_window(&app, None);
+                return;
+            }
+            let focused = app.windows().into_values().find(|w| w.is_focused().unwrap_or(false));
+            if let Some(w) = focused {
+                if id == "closewindow" {
+                    let _ = w.destroy();
+                    return;
+                }
+                let _ = app.emit_to(
+                    tauri::EventTarget::webview(format!("ui-{}", w.label())),
+                    "plume-cmd",
+                    serde_json::json!({ "tab": null, "cmd": id }),
+                );
+            }
+        });
+    });
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -463,7 +553,7 @@ pub fn run() {
             wins: Mutex::new(HashMap::new()),
         })
         .invoke_handler(tauri::generate_handler![
-            tab_create, tab_show, tab_close, tab_navigate, tab_action, set_overlay, new_window,
+            tab_create, tab_show, tab_close, tab_navigate, tab_action, set_overlay, new_window, close_window,
             history_list, history_delete, history_clear
         ])
         .setup(|app| {
@@ -481,6 +571,8 @@ pub fn run() {
                 }
                 *state.history_path.lock().unwrap() = Some(p);
             }
+            #[cfg(target_os = "macos")]
+            setup_macos_menu(&handle)?;
             open_window(&handle, None)?;
             Ok(())
         })

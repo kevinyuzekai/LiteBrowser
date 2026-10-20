@@ -11,12 +11,17 @@
     "withGlobalTauri": true,
     "windows": [],
     "security": {
-      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'"
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; script-src 'self'"
     }
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis", "msi", "dmg", "app"],
+    "targets": [
+      "nsis",
+      "msi",
+      "dmg",
+      "app"
+    ],
     "publisher": "kevinyuzekai",
     "category": "Utility",
     "shortDescription": "Plume 羽览",
@@ -30,13 +35,23 @@
       "icons/icon.ico"
     ],
     "windows": {
-      "webviewInstallMode": { "type": "downloadBootstrapper" },
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
       "nsis": {
-        "languages": ["SimpChinese", "English"],
+        "languages": [
+          "SimpChinese",
+          "English"
+        ],
         "displayLanguageSelector": false,
         "installMode": "currentUser"
       },
-      "wix": { "language": ["zh-CN", "en-US"] }
+      "wix": {
+        "language": [
+          "zh-CN",
+          "en-US"
+        ]
+      }
     },
     "macOS": {
       "minimumSystemVersion": "10.15"
